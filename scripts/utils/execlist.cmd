@@ -1,21 +1,25 @@
-@if not defined %1[1] goto:eof
+@set i=0
 
-@for /F "tokens=2 delims==" %%s in ('set %1[') do @(
+:loop
+@if not defined %1[%i%]  goto:eof
 
-	set command=%%s
-	for /f "tokens=* delims= " %%a in ("!command!") do @(set command=%%a)
-				               	
-	if not "!command!"=="" 	(
+@for /f "delims== tokens=2" %%j in ('set %1[%i%]') do @(
+		
+	@call %~dp0/trim_left "%%j" execListCommand
+	if not "!execListCommand!"=="" 	(
 				
 		@echo.
-		if "!command:~0,4!"=="echo" (			
-			@echo		!command:~5,9999999999999999!
+		if "!execListCommand:~0,4!"=="echo" (			
+			@echo		!execListCommand:~5,9999999999999999!
 		) else (
-                        @echo		Exec: !command!
-			%%s			
-			if "!command:~0,4!"=="adb " (
+                        @echo		Exec: !execListCommand!
+			!execListCommand!
+			if "!execListCommand:~0,4!"=="adb " (
 				if %ADB_EXEC_DELAY% GTR 0 (timeout %ADB_EXEC_DELAY% > NUL) 	
 			)								
 		)														
 	)	
+
 )
+@set /a i=%i%+1
+@goto loop
