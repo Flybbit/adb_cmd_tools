@@ -1,3 +1,6 @@
+@if defined adb_cmd_tools_config goto:eof
+@set adb_cmd_tools_config=1
+
 @rem adb_exec calls this cmd every time at the very beginning
 
 @rem ADB_NET_EXEC_DELAY and ADB_USB_EXEC_DELAY defines timeout aftere command execution
